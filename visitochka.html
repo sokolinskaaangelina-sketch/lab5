@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ангелина — визитка</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Jost:wght@300;400;500&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#10060a; --wine:#4a0c1a;
+  --rose:#e6bfae; --rose-dim:#b98c80; --gold:#cda869;
+  --text:#f2e4dd; --muted:#a58b86;
+  /* шрифты: Cormorant — только для имени «Ангелина»; Playfair — заголовки; Jost — основной текст и кнопки */
+  --name:'Cormorant Garamond', Georgia, serif;
+  --serif:'Playfair Display', Georgia, serif;
+  --sans:'Jost', system-ui, sans-serif;
+  --k:1;
+  --soft:contrast(.86) saturate(.86) brightness(1.05) sepia(.2);
+}
+@media (max-aspect-ratio:1/1){:root{--k:1.9}}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-weight:300;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body:not(.ready){overflow:hidden;height:100vh}
+body::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(60vw 60vw at 85% 15%, rgba(110,20,40,.55), transparent 60%),
+    radial-gradient(50vw 50vw at 5% 95%, rgba(74,12,26,.6), transparent 60%),
+    linear-gradient(180deg,#14070c,#0c0408);
+}
+img{display:block;user-select:none;-webkit-user-drag:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit;text-decoration:none}
+
+/* ---------- INTRO ---------- */
+#intro{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at 50% 50%,#200912,#0b0407 75%);overflow:hidden;transition:opacity 1.4s ease, visibility 0s 0.6s}
+#intro.done{opacity:0;visibility:hidden}
+.iflower{position:absolute;left:var(--x);top:var(--y);width:calc(var(--s)*var(--k)*1vw);transform:translate(-50%,-50%) rotate(var(--r))}
+.iflower img{width:100%;height:auto;opacity:0;animation:bloomIn .8s cubic-bezier(.2,.9,.25,1) forwards;animation-delay:var(--d);filter:drop-shadow(0 10px 30px rgba(0,0,0,.6))}
+@keyframes bloomIn{0%{opacity:0;transform:scale(.05) rotate(-80deg)}60%{opacity:1}100%{opacity:1;transform:scale(1) rotate(0)}}
+#skip{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:var(--rose-dim);opacity:.7;transition:opacity .4s, color .4s;z-index:3;padding:8px 14px}
+#skip:hover{opacity:1;color:var(--rose)}
+
+/* ---------- NAV ---------- */
+nav{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;justify-content:center;padding:22px clamp(20px,5vw,64px);opacity:0;transition:opacity 1.2s ease .4s, background-color .6s, backdrop-filter .6s}
+body.ready nav{opacity:1}
+nav.solid{background:linear-gradient(180deg,rgba(16,6,10,.88),rgba(16,6,10,.55));backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.links{display:flex;gap:clamp(22px,4vw,56px)}
+.links button{position:relative;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);padding:8px 0;transition:color .5s}
+.links button::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--rose);transform:scaleX(0);transform-origin:left;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.links button:hover,.links button.on{color:var(--rose)}
+.links button.on::after,.links button:hover::after{transform:scaleX(1)}
+
+/* ---------- SECTIONS ---------- */
+.page{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;padding:clamp(100px,14vh,140px) clamp(20px,6vw,90px) clamp(60px,10vh,110px)}
+.wrap{width:100%;max-width:1240px;margin:0 auto;position:relative;z-index:2}
+
+.w{display:inline-block;overflow:hidden;vertical-align:top;padding:.12em .2em .3em .1em;margin:-.12em -.2em -.3em -.1em}
+.w>i{display:inline-block;font-style:inherit;transform:translateY(110%)}
+.page.active .w>i{transform:none;transition:transform 1.1s cubic-bezier(.2,.85,.2,1) var(--d)}
+.rv{opacity:0;filter:blur(8px);transform:translateY(18px)}
+.page.active .rv{opacity:1;filter:none;transform:none;transition:opacity 1.1s ease var(--d),filter 1.1s ease var(--d),transform 1.1s cubic-bezier(.2,.8,.2,1) var(--d)}
+
+.eyebrow{font-size:11px;letter-spacing:.38em;text-transform:uppercase;color:var(--rose-dim)}
+h2{font-family:var(--serif);font-weight:400;line-height:1.08;color:var(--text);font-size:clamp(34px,4.4vw,64px)}
+h2 em{font-style:normal;color:var(--rose);font-weight:400}
+
+/* button */
+.btn{position:relative;display:inline-flex;align-items:center;gap:14px;overflow:hidden;padding:16px 32px;border-radius:999px;border:1px solid rgba(230,191,174,.4);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--rose);transition:border-color .6s, box-shadow .6s, color .6s}
+.btn::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .6s;background:radial-gradient(160px circle at var(--mx,50%) var(--my,50%), rgba(230,191,174,.38), transparent 70%)}
+.btn:hover{border-color:var(--rose);box-shadow:0 0 34px rgba(190,70,95,.35), inset 0 0 22px rgba(230,191,174,.08);color:#fff}
+.btn:hover::before{opacity:1}
+.btn.fill{background:linear-gradient(135deg,rgba(160,36,62,.55),rgba(90,16,34,.55));border-color:rgba(230,191,174,.3)}
+.btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.4}
+
+/* ---------- HERO ---------- */
+/* Главный экран в стиле «портфолио»: огромный заголовок на всю ширину,
+   фото поверх букв, подпись и кнопки внизу слева, цветы на заднем плане */
+#home{align-items:stretch;overflow:hidden;padding:clamp(76px,10vh,100px) clamp(20px,5vw,70px) 0}
+.hero{position:relative;width:100%;max-width:1400px;margin:0 auto;display:flex;flex-direction:column;min-height:calc(100vh - clamp(76px,10vh,100px))}
+.hero-title{position:relative;z-index:2;width:100%;margin:clamp(0px,2vh,18px) 0 0;line-height:0}
+.hero-title svg{display:block;width:100%;height:auto;overflow:visible}
+.hero-title text{font-family:var(--serif);font-weight:600;fill:var(--rose)}
+.hero-photo{position:absolute;z-index:3;left:50%;bottom:0;height:100%;transform:translateX(-50%);
+  -webkit-mask-image:linear-gradient(180deg,#000 90%,transparent 100%);mask-image:linear-gradient(180deg,#000 90%,transparent 100%)}
+.hero-photo img{height:100%;width:auto;max-width:none;filter:drop-shadow(0 20px 50px rgba(0,0,0,.5))}
+.hero-info{position:absolute;z-index:4;left:0;bottom:clamp(80px,17vh,170px);display:flex;flex-direction:column;align-items:flex-start;gap:22px}
+.tagline{font-family:var(--sans);font-weight:400;font-size:clamp(13px,1.15vw,17px);line-height:1.75;letter-spacing:.16em;text-transform:uppercase;color:var(--text);max-width:19em}
+.tagline em{font-style:normal;color:var(--rose)}
+.btns{display:flex;flex-wrap:wrap;gap:12px}
+.btns .btn{padding:13px 24px;font-size:10px;letter-spacing:.24em}
+.btns .btn svg{width:14px;height:14px}
+
+/* ---------- ARCH PHOTO ---------- */
+.arch{position:relative;width:min(100%,440px);aspect-ratio:3/4;margin:0 auto;border-radius:999px 999px 20px 20px;
+  background:radial-gradient(70% 55% at 50% 30%, rgba(160,36,62,.7), rgba(74,12,26,.85) 60%, rgba(30,6,14,.9));
+  box-shadow:0 0 0 1px rgba(230,191,174,.14), 0 40px 90px rgba(0,0,0,.5)}
+.arch .clip{position:absolute;inset:0;clip-path:inset(-30% -18% 0 -18% round 0 0 20px 20px)}
+.arch img{position:absolute;left:50%;bottom:0;transform:translateX(-50%);height:112%;width:auto;max-width:none;filter:drop-shadow(0 20px 40px rgba(0,0,0,.45))}
+.arch .glow{position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;box-shadow:inset 0 0 60px rgba(205,168,105,.12)}
+
+/* ---------- ДОСТИЖЕНИЯ (низ арки = низ последнего блока) ---------- */
+.ach{display:grid;grid-template-columns:.75fr 1.35fr;gap:clamp(24px,5vw,90px);align-items:end}
+.ach h2{margin:0 0 clamp(18px,3vh,36px)}
+.rows{display:flex;flex-direction:column}
+.row{position:relative;display:grid;grid-template-columns:clamp(110px,12vw,170px) 1fr;gap:clamp(16px,2.4vw,40px);padding:clamp(18px,2.6vh,30px) 22px;overflow:hidden;border-radius:16px}
+.row:last-child{padding-bottom:6px}
+.row::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .7s;background:radial-gradient(380px circle at var(--mx,50%) var(--my,50%), rgba(160,36,62,.35), transparent 70%)}
+.row:hover::before{opacity:1}
+.stat{font-family:var(--serif);font-size:clamp(36px,4vw,58px);font-weight:400;line-height:1;color:var(--rose);position:relative}
+.stat small{display:block;font-family:var(--sans);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:12px;line-height:1.5}
+.row h3{font-family:var(--serif);font-weight:400;font-size:clamp(18px,1.6vw,24px);line-height:1.25;margin-bottom:8px;position:relative}
+.row p{font-size:clamp(13px,1vw,14.5px);line-height:1.75;color:var(--muted);position:relative}
+
+/* ---------- ТЕХНОЛОГИИ ---------- */
+.skills{display:grid;grid-template-columns:1.5fr .8fr;gap:clamp(24px,5vw,80px);align-items:end}
+.skills h2{margin:0 0 clamp(20px,3.4vh,40px)}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.tile{position:relative;overflow:hidden;border-radius:18px;padding:26px 22px 24px;background:linear-gradient(160deg,rgba(74,12,26,.5),rgba(26,8,14,.55));border:1px solid rgba(230,191,174,.1);transition:border-color .6s, box-shadow .6s}
+.tile::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .6s;background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%), rgba(190,70,95,.35), transparent 70%)}
+.tile:hover{border-color:rgba(230,191,174,.38);box-shadow:0 0 36px rgba(160,36,62,.25)}
+.tile:hover::before{opacity:1}
+.ico{position:relative;width:52px;height:52px;border-radius:14px;display:grid;place-items:center;margin-bottom:20px;background:rgba(230,191,174,.08);border:1px solid rgba(230,191,174,.16);transition:background-color .6s,border-color .6s}
+.tile:hover .ico{background:rgba(230,191,174,.16);border-color:rgba(230,191,174,.4)}
+.ico svg{width:26px;height:26px;stroke:var(--rose);fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+.tile h3{position:relative;font-family:var(--serif);font-weight:500;font-size:17px;line-height:1.3;margin-bottom:8px;color:var(--text)}
+.tile p{position:relative;font-size:12.5px;line-height:1.7;color:var(--muted)}
+
+/* ---------- ПОДВАЛ: часть страницы, «выезжает» при прокрутке ---------- */
+.foot{position:relative;z-index:1;padding:0 clamp(20px,6vw,90px) 40px;overflow:hidden}
+.foot::before{content:"";position:absolute;left:0;right:0;bottom:0;height:80%;pointer-events:none;
+  background:radial-gradient(60% 100% at 50% 100%, rgba(110,20,40,.38), transparent 70%)}
+.foot-line{position:relative;max-width:1240px;margin:0 auto;height:1px;background:linear-gradient(90deg,transparent,rgba(230,191,174,.4),transparent)}
+.foot-inner{position:relative;max-width:1240px;margin:0 auto;padding:54px 0 10px;display:flex;align-items:center;justify-content:space-between;gap:32px;
+  transform:translateY(var(--fy,60px));opacity:var(--fo,0);will-change:transform,opacity}
+.f-left{display:flex;align-items:center;gap:clamp(22px,3vw,44px)}
+.f-brand{font-family:var(--name);font-style:italic;font-weight:600;font-size:clamp(42px,4.4vw,64px);line-height:1;color:var(--rose);padding:2px clamp(22px,3vw,44px) 8px 0;border-right:1px solid rgba(230,191,174,.22)}
+.f-links{display:flex;gap:clamp(16px,2vw,28px);flex-wrap:wrap;margin-bottom:12px}
+.f-links button{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);padding:4px 0;transition:color .5s}
+.f-links button:hover{color:var(--rose)}
+.f-copy{font-size:12.5px;color:var(--muted);opacity:.8}
+.f-right{display:flex;flex-direction:column;align-items:flex-end;gap:16px}
+.f-icons{display:flex;gap:12px}
+.f-icons a{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:rgba(230,191,174,.08);border:1px solid rgba(230,191,174,.16);transition:background-color .5s,border-color .5s,box-shadow .5s}
+.f-icons a:hover{background:rgba(230,191,174,.16);border-color:rgba(230,191,174,.4);box-shadow:0 0 26px rgba(160,36,62,.3)}
+.f-icons svg{width:20px;height:20px;stroke:var(--rose);fill:none;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;display:block}
+.f-mail{font-size:13px;letter-spacing:.04em;color:var(--muted);transition:color .5s}
+.f-mail:hover{color:var(--rose)}
+
+/* ---------- ЦВЕТЫ НА ФОНЕ (без реакции на мышь) ---------- */
+.deco{position:absolute;z-index:1;pointer-events:none;left:var(--x);top:var(--y);width:calc(var(--s)*1vw);min-width:var(--min,110px);
+  transform:translateY(calc(var(--sy,0)*var(--depth,10)*-1px));transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+.deco .sway{animation:sway 9s ease-in-out infinite;animation-delay:var(--sd,0s);transform-origin:50% 60%}
+.deco img{width:100%;height:auto;pointer-events:auto;cursor:pointer;filter:var(--soft) drop-shadow(0 14px 30px rgba(0,0,0,.55))}
+.deco.far{z-index:0}
+.deco.far img{filter:blur(3px) brightness(.8)}
+.deco img.bloom{animation:bloom 1.5s cubic-bezier(.3,.8,.2,1)}
+@keyframes sway{0%,100%{transform:rotate(calc(var(--r,0deg) - 3deg))}50%{transform:rotate(calc(var(--r,0deg) + 4deg))}}
+@keyframes bloom{0%{transform:scale(1) rotate(0)}45%{transform:scale(1.2) rotate(80deg);filter:brightness(1.3) drop-shadow(0 0 40px rgba(230,100,130,.6))}100%{transform:scale(1) rotate(360deg)}}
+.page .deco{opacity:0;transition:opacity 1.6s ease .5s, transform .9s cubic-bezier(.2,.8,.2,1)}
+.page.active .deco{opacity:var(--o,1)}
+.petal{position:fixed;z-index:60;pointer-events:none;width:13px;height:17px;border-radius:100% 0 100% 0;background:linear-gradient(135deg,#a3213d,#3a0813);animation:fall 1.8s cubic-bezier(.2,.7,.3,1) forwards}
+@keyframes fall{0%{opacity:1;transform:translate(0,0) rotate(0) scale(.6)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--rot)) scale(1.1)}}
+
+/* ---------- MOBILE ---------- */
+@media (max-width:860px){
+  .ach,.skills{grid-template-columns:1fr}
+  .hero{min-height:0}
+  .hero-photo{position:relative;left:auto;bottom:auto;height:auto;transform:none;width:min(100%,460px);margin:-9vw auto 0;
+    -webkit-mask-image:linear-gradient(180deg,#000 88%,transparent 100%);mask-image:linear-gradient(180deg,#000 88%,transparent 100%)}
+  .hero-photo img{position:static;width:100%;height:auto;margin:0}
+  .hero-info{position:relative;left:auto;bottom:auto;z-index:4;margin:-4vw 0 56px}
+  .ach .arch,.skills .arch{width:min(60%,280px);order:2}
+  .tiles{grid-template-columns:1fr 1fr}
+  .row{grid-template-columns:1fr;gap:10px}
+  .links button{font-size:9.5px;letter-spacing:.18em}
+  .links{gap:18px}
+  .foot-inner{flex-direction:column;align-items:flex-start}
+  .f-left{flex-direction:column;align-items:flex-start;gap:16px}
+  .f-brand{border-right:0;padding-right:0}
+  .f-right{align-items:flex-start}
+}
+@media (max-width:480px){.tiles{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.deco .sway{animation:none}html{scroll-behavior:auto}.foot-inner{transform:none;opacity:1}}
+</style>
+</head>
+<body>
+
+<div id="intro">
+  <div id="intro-flowers"></div>
+  <button id="skip">пропустить</button>
+</div>
+
+<nav id="nav">
+  <div class="links">
+    <button data-go="home" class="on">Главная</button>
+    <button data-go="ach">Достижения</button>
+    <button data-go="skills">Технологии</button>
+  </div>
+</nav>
+
+<!-- ============ ГЛАВНАЯ ============ -->
+<section class="page" id="home">
+  <!-- цветы на заднем плане: за заголовком и за фото, часть обрезана краями экрана -->
+  <div class="deco" style="--x:-4%;--y:58%;--s:21;--r:-12deg;--depth:14;--sd:-2s"><div class="sway"><img data-f="0" src="flower1.png" alt=""></div></div>
+  <div class="deco" style="--x:87%;--y:54%;--s:17;--r:-24deg;--depth:18;--sd:-7s"><div class="sway"><img data-f="2" src="flower3.png" alt=""></div></div>
+  <div class="deco" style="--x:84%;--y:-6%;--s:16;--r:18deg;--depth:-12;--sd:-5s"><div class="sway"><img data-f="1" src="flower2.png" alt=""></div></div>
+  <div class="deco far" style="--x:-3%;--y:-5%;--s:13;--min:90px;--o:.6;--r:-20deg;--depth:8;--sd:-3s"><div class="sway"><img data-f="1" src="flower2.png" alt=""></div></div>
+  <div class="deco far" style="--x:36%;--y:-4%;--s:9;--min:80px;--o:.45;--r:30deg;--depth:6;--sd:-1s"><div class="sway"><img data-f="0" src="flower1.png" alt=""></div></div>
+  <div class="deco far" style="--x:28%;--y:74%;--s:9;--min:80px;--o:.4;--r:15deg;--depth:6;--sd:-6s"><div class="sway"><img data-f="2" src="flower3.png" alt=""></div></div>
+
+  <div class="hero">
+    <h1 class="hero-title rv" style="--d:.5s">
+      <svg viewBox="0 0 1000 300" role="img" aria-label="Ангелина">
+        <text x="0" y="292" font-size="400" textLength="1000" lengthAdjust="spacingAndGlyphs">АНГЕЛИНА</text>
+      </svg>
+    </h1>
+
+    <div class="hero-photo">
+      <img class="rv" style="--d:.9s" src="str1.png" alt="Ангелина">
+    </div>
+
+    <div class="hero-info">
+      <p class="tagline rv" style="--d:1.3s">Проекты, команды и <em>красивые процессы</em></p>
+      <div class="btns rv" style="--d:1.6s">
+        <button class="btn fill" data-go="ach">Мои достижения
+          <svg viewBox="0 0 16 16"><path d="M2 8h12M9 3l5 5-5 5"/></svg>
+        </button>
+        <button class="btn" data-go="skills">Технологии</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ДОСТИЖЕНИЯ ============ -->
+<section class="page" id="ach">
+  <div class="deco" style="--x:1%;--y:56%;--s:17;--r:-20deg;--depth:12;--sd:-3s"><div class="sway"><img data-f="2" src="flower3.png" alt=""></div></div>
+  <div class="deco far" style="--x:38%;--y:4%;--s:10;--min:80px;--o:.5;--r:-15deg;--depth:6;--sd:-4s"><div class="sway"><img data-f="1" src="flower2.png" alt=""></div></div>
+  <div class="deco" style="--x:81%;--y:14%;--s:15;--r:22deg;--depth:-10;--sd:-6s"><div class="sway"><img data-f="0" src="flower1.png" alt=""></div></div>
+  <div class="deco far" style="--x:2%;--y:4%;--s:11;--min:90px;--o:.55;--r:10deg;--depth:8;--sd:-2s"><div class="sway"><img data-f="0" src="flower1.png" alt=""></div></div>
+  <div class="deco far" style="--x:86%;--y:66%;--s:10;--min:80px;--o:.5;--r:-8deg;--depth:7;--sd:-5s"><div class="sway"><img data-f="1" src="flower2.png" alt=""></div></div>
+  <div class="deco far" style="--x:50%;--y:80%;--s:9;--min:80px;--o:.3;--r:12deg;--depth:6;--sd:-7s"><div class="sway"><img data-f="2" src="flower3.png" alt=""></div></div>
+
+  <div class="wrap ach">
+    <div class="arch rv" style="--d:.5s">
+      <div class="glow"></div>
+      <div class="clip"><img src="str2.png" alt=""></div>
+    </div>
+    <div>
+      <h2 data-split="words" data-base=".6">Мои <em>достижения</em></h2>
+      <div class="rows">
+        <article class="row rv" style="--d:1.2s">
+          <div class="stat">4<small>человека<br>в команде</small></div>
+          <div>
+            <h3>Проектный менеджер образовательного курса</h3>
+            <p>Разработала и запустила интерактивный курс по веб-дизайну на платформе Moodle. Планировала спринты, вела бэклог, контролировала сроки и координировала вёрстку страниц на HTML/CSS. Курс получил положительную обратную связь.</p>
+          </div>
+        </article>
+        <article class="row rv" style="--d:1.5s">
+          <div class="stat">95%<small>выходов контента<br>в срок</small></div>
+          <div>
+            <h3>Руководитель направления (БРСМ)</h3>
+            <p>За 6 месяцев выстроила системную работу команды из 10 человек: чёткое планирование публикаций и контроль дедлайнов. Охваты аудитории выросли на 30%.</p>
+          </div>
+        </article>
+        <article class="row rv" style="--d:1.8s">
+          <div class="stat">−40%<small>времени<br>на согласования</small></div>
+          <div>
+            <h3>Оптимизация рабочих процессов</h3>
+            <p>Внедрила прозрачную систему управления задачами на базе Kaiten и Scrum-практик: команда перестала терять задачи, а каждый участник понимал свою зону ответственности и сроки.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ТЕХНОЛОГИИ ============ -->
+<section class="page" id="skills">
+  <div class="deco" style="--x:1%;--y:54%;--s:18;--r:-10deg;--depth:-12;--sd:-4s"><div class="sway"><img data-f="0" src="flower1.png" alt=""></div></div>
+  <div class="deco far" style="--x:3%;--y:3%;--s:9;--min:80px;--o:.55;--r:8deg;--depth:6;--sd:-5s"><div class="sway"><img data-f="1" src="flower2.png" alt=""></div></div>
+  <div class="deco far" style="--x:78%;--y:4%;--s:18;--min:220px;--o:.45;--r:-18deg;--depth:8;--sd:-3s"><div class="sway"><img data-f="2" src="flower3.png" alt=""></div></div>
+  <div class="deco far" style="--x:44%;--y:4%;--s:9;--min:80px;--o:.4;--r:20deg;--depth:6;--sd:-1s"><div class="sway"><img data-f="1" src="flower2.png" alt=""></div></div>
+  <div class="deco far" style="--x:86%;--y:68%;--s:10;--min:80px;--o:.4;--r:-12deg;--depth:7;--sd:-6s"><div class="sway"><img data-f="0" src="flower1.png" alt=""></div></div>
+
+  <div class="wrap skills">
+    <div>
+      <h2 data-split="words" data-base=".6">Технологии,<br>которыми <em>я владею</em></h2>
+      <div class="tiles">
+        <div class="tile rv" style="--d:1.1s">
+          <div class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="5" height="14" rx="1.2"/><rect x="9.5" y="4" width="5" height="9" rx="1.2"/><rect x="16" y="4" width="5" height="12" rx="1.2"/></svg></div>
+          <h3>Управление проектами</h3>
+          <p>Kaiten · Agile / Scrum<br>Канбан · Jira · Trello</p>
+        </div>
+        <div class="tile rv" style="--d:1.25s">
+          <div class="ico"><svg viewBox="0 0 24 24"><path d="M10 3l1.9 5.1L17 10l-5.1 1.9L10 17l-1.9-5.1L3 10l5.1-1.9z"/><path d="M18 14l.9 2.1L21 17l-2.1.9L18 20l-.9-2.1L15 17l2.1-.9z"/></svg></div>
+          <h3>Искусственный интеллект</h3>
+          <p>ChatGPT · Claude · DeepSeek<br>Copilot · нейросети Google</p>
+        </div>
+        <div class="tile rv" style="--d:1.4s">
+          <div class="ico"><svg viewBox="0 0 24 24"><path d="M8 7l-5 5 5 5"/><path d="M16 7l5 5-5 5"/><path d="M13.5 5l-3 14"/></svg></div>
+          <h3>Веб-разработка</h3>
+          <p>HTML5 · CSS3<br>платформа Moodle</p>
+        </div>
+        <div class="tile rv" style="--d:1.55s">
+          <div class="ico"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="2.8"/><path d="M5 6v6c0 1.5 3.1 2.8 7 2.8s7-1.3 7-2.8V6"/><path d="M5 12v6c0 1.5 3.1 2.8 7 2.8s7-1.3 7-2.8v-6"/></svg></div>
+          <h3>Данные и код</h3>
+          <p>Основы SQL<br>принципы ООП</p>
+        </div>
+        <div class="tile rv" style="--d:1.7s">
+          <div class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/><path d="M9 9v11"/></svg></div>
+          <h3>Офис и дизайн</h3>
+          <p>Google Документы · Excel<br>Word · PowerPoint · Canva</p>
+        </div>
+        <div class="tile rv" style="--d:1.85s">
+          <div class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.6 2.6 3.8 5.6 3.8 9s-1.2 6.4-3.8 9c-2.6-2.6-3.8-5.6-3.8-9S9.4 5.6 12 3z"/></svg></div>
+          <h3>Языки</h3>
+          <p>Русский — родной<br>Английский — B2</p>
+        </div>
+      </div>
+    </div>
+    <div class="arch rv" style="--d:.7s">
+      <div class="glow"></div>
+      <div class="clip"><img src="str3.png" alt=""></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ПОДВАЛ ============ -->
+<footer class="foot" id="foot">
+  <div class="foot-line"></div>
+  <div class="foot-inner" id="foot-inner">
+    <div class="f-left">
+      <div class="f-brand">Ангелина</div>
+      <div>
+        <div class="f-links">
+          <button data-go="home">Главная</button>
+          <button data-go="ach">Достижения</button>
+          <button data-go="skills">Технологии</button>
+        </div>
+        <div class="f-copy">© 2026 Ангелина. Все права защищены.</div>
+      </div>
+    </div>
+    <div class="f-right">
+      <div class="f-icons">
+        <a href="https://t.me/gelasokol" target="_blank" rel="noopener" aria-label="Telegram" title="Telegram"><svg viewBox="0 0 24 24"><path d="M21.5 3.5L2.5 10.8l6.2 2.4 2.3 6.8 3.2-4.4 5 3.7z"/><path d="M8.7 13.2l12.8-9.7"/></svg></a>
+        <a href="https://www.instagram.com/angelia.sokol?srtk=MTUyNjZ3amswNHc4ZQ%3D%3D&amp;utm_source=qr" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8"/></svg></a>
+        <a href="mailto:sokolinskaaangelina@gmail.com" aria-label="Почта" title="Почта"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></a>
+      </div>
+      <a class="f-mail" href="mailto:sokolinskaaangelina@gmail.com">sokolinskaaangelina@gmail.com</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* имена файлов лежат рядом с index.html */
+const IMG={
+  "photo-1":"str1.png",
+  "photo-2":"str2.png",
+  "photo-3":"str3.png",
+  "flower-1":"flower1.png",
+  "flower-2":"flower2.png",
+  "flower-3":"flower3.png"
+};
+
+/* запасные нарисованные цветы, если файл не найден */
+function flowerSVG(i){
+  const cols=[['#7a1228','#3b0714'],['#8d1b34','#4a0c1a'],['#a32a40','#5a1022'],['#7a1a3a','#3a0814']][i%4];
+  let p='';for(let k=0;k<5;k++){p+=`<ellipse cx="100" cy="52" rx="30" ry="50" fill="url(#g)" transform="rotate(${k*72} 100 100)"/>`;}
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><radialGradient id="g" cx="50%" cy="85%" r="90%"><stop offset="0" stop-color="${cols[1]}"/><stop offset="1" stop-color="${cols[0]}"/></radialGradient></defs>${p}<circle cx="100" cy="100" r="12" fill="#cda869"/><circle cx="100" cy="100" r="5" fill="#6a4a1a"/></svg>`;
+  return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+}
+function fb(img){img.onerror=null;img.src=flowerSVG(+img.dataset.f||0);}
+document.querySelectorAll('.deco img').forEach(i=>{i.onerror=()=>fb(i)});
+
+/* текст: слова выплывают */
+function split(el){
+  const base=parseFloat(el.dataset.base||0);
+  let n=0;
+  (function walk(node){
+    [...node.childNodes].forEach(c=>{
+      if(c.nodeType===3){
+        const frag=document.createDocumentFragment();
+        c.textContent.split(/(\s+)/).forEach(p=>{
+          if(!p) return;
+          if(/^\s+$/.test(p)){frag.append(' ');return;}
+          const w=document.createElement('span');w.className='w';
+          const i=document.createElement('i');i.textContent=p;
+          i.style.setProperty('--d',(base+0.07*n++)+'s');
+          w.append(i);frag.append(w);
+        });
+        c.replaceWith(frag);
+      }else if(c.nodeType===1) walk(c);
+    });
+  })(el);
+}
+document.querySelectorAll('[data-split]').forEach(split);
+
+/* интро */
+const introEl=document.getElementById('intro');
+const box=document.getElementById('intro-flowers');
+const flowerKeys=['flower-1','flower-2','flower-3'];
+const layout=[
+  [50,50,36,0,0],[22,28,28,1,-25],[78,30,30,2,30],[26,74,30,2,-15],[76,74,28,0,40],
+  [50,15,26,2,-10],[50,87,26,1,15],[7,48,26,1,10],[93,52,26,0,-30],[12,10,22,2,20],[90,90,22,1,-20],[10,90,20,0,25]
+];
+layout.forEach((l,i)=>{
+  const [x,y,s,f,r]=l;
+  const d=document.createElement('div');
+  d.className='iflower';
+  d.style.cssText=`--x:${x}%;--y:${y}%;--s:${s};--r:${r}deg`;
+  const img=document.createElement('img');
+  img.dataset.f=f;img.src=IMG[flowerKeys[f]];img.alt='';
+  img.style.animationDelay=(0.15+i*0.18)+'s';
+  img.onerror=()=>fb(img);
+  d.append(img);box.append(d);
+});
+
+const secs=[...document.querySelectorAll('.page')];
+const navBtns=[...document.querySelectorAll('.links button')];
+const nav=document.getElementById('nav');
+const foot=document.getElementById('foot');
+const footInner=document.getElementById('foot-inner');
+let introFinished=false;
+function finishIntro(){
+  if(introFinished) return;
+  introFinished=true;
+  introEl.classList.add('done');
+  document.body.classList.add('ready');
+  const io=new IntersectionObserver(es=>{
+    es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('active');io.unobserve(e.target);}});
+  },{threshold:.18});
+  secs.forEach(s=>io.observe(s));
+  par();
+}
+const introTimer=setTimeout(finishIntro,1700);
+document.getElementById('skip').addEventListener('click',()=>{clearTimeout(introTimer);finishIntro()});
+
+/* навигация (в меню и в подвале) */
+document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>{
+  document.getElementById(b.dataset.go).scrollIntoView({behavior:'smooth'});
+}));
+
+/* скролл: параллакс цветов, подсветка меню, подвал выезжает снизу вверх */
+let tick=false;
+function par(){
+  tick=false;
+  const vh=innerHeight;
+  let curId=secs[0].id;
+  secs.forEach(s=>{
+    const r=s.getBoundingClientRect();
+    if(r.bottom>-100&&r.top<vh+100) s.style.setProperty('--sy',((r.top+r.height/2-vh/2)/vh).toFixed(3));
+    if(r.top<vh*0.45) curId=s.id;
+  });
+  navBtns.forEach(b=>b.classList.toggle('on',b.dataset.go===curId));
+  nav.classList.toggle('solid',scrollY>40);
+
+  const fr=foot.getBoundingClientRect();
+  let p=(vh-fr.top)/(fr.height*0.9);
+  p=Math.max(0,Math.min(1,p));
+  const e=1-Math.pow(1-p,3);
+  footInner.style.setProperty('--fy',((1-e)*70).toFixed(1)+'px');
+  footInner.style.setProperty('--fo',e.toFixed(3));
+}
+addEventListener('scroll',()=>{if(!tick){tick=true;requestAnimationFrame(par)}},{passive:true});
+addEventListener('resize',par);
+
+/* подсветка под курсором (только блоки и кнопки, цветы мышь не трогает) */
+document.querySelectorAll('.btn,.row,.tile').forEach(el=>{
+  el.addEventListener('pointermove',e=>{
+    const r=el.getBoundingClientRect();
+    el.style.setProperty('--mx',(e.clientX-r.left)+'px');
+    el.style.setProperty('--my',(e.clientY-r.top)+'px');
+  });
+});
+
+/* клик по цветку: распускается + лепестки */
+document.querySelectorAll('.deco img').forEach(img=>{
+  img.addEventListener('click',()=>{
+    img.classList.remove('bloom');void img.offsetWidth;img.classList.add('bloom');
+    img.addEventListener('animationend',()=>img.classList.remove('bloom'),{once:true});
+    const r=img.getBoundingClientRect();
+    const cx=r.left+r.width/2, cy=r.top+r.height/2;
+    for(let k=0;k<14;k++){
+      const p=document.createElement('div');p.className='petal';
+      const a=Math.random()*Math.PI*2, d=80+Math.random()*180;
+      p.style.left=cx+'px';p.style.top=cy+'px';
+      p.style.setProperty('--dx',Math.cos(a)*d+'px');
+      p.style.setProperty('--dy',(Math.sin(a)*d+90+Math.random()*120)+'px');
+      p.style.setProperty('--rot',(Math.random()*540-270)+'deg');
+      p.style.animationDelay=(Math.random()*.2)+'s';
+      document.body.append(p);
+      setTimeout(()=>p.remove(),2300);
+    }
+  });
+});
+</script>
+</body>
+</html>
